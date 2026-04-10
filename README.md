@@ -429,6 +429,8 @@ filter = ta.atr(14) * PipsMinSepPercent / 100
 
 //-- Plots
 BraidColor = ma01 > ma02 and dif > filter ? color.green : ma02 > ma01 and dif > filter ? color.red : color.gray
+BraidBull  = ma01 > ma02 and dif > filter
+BraidBear  = ma02 > ma01 and dif > filter
 
 //plot(dif, 'Braid', BraidColor, 5, plot.style_columns)
 //plot(filter, 'Filter', color.new(color.blue, 0), 2, plot.style_line)
@@ -1326,21 +1328,21 @@ choch_bear = bos_bear and trend == 1
 
 if show_ms
     if bos_bull
-        lc_ms = choch_bull ? color.orange : color.lime
-        lt_ms = choch_bull ? 'CHoCH ▲' : 'BOS ▲'
-        label.new(bar_index, low - ta.atr(14) * 0.5, lt_ms, color = color.new(lc_ms, 100), textcolor = lc_ms, style = label.style_label_up, size = size.small)
+        lc_bull = choch_bull ? color.orange : color.lime
+        lt_bull = choch_bull ? 'CHoCH ▲' : 'BOS ▲'
+        label.new(bar_index, low - ta.atr(14) * 0.5, lt_bull, color = color.new(lc_bull, 100), textcolor = lc_bull, style = label.style_label_up, size = size.small)
     if bos_bear
-        lc_ms = choch_bear ? color.orange : color.red
-        lt_ms = choch_bear ? 'CHoCH ▼' : 'BOS ▼'
-        label.new(bar_index, high + ta.atr(14) * 0.5, lt_ms, color = color.new(lc_ms, 100), textcolor = lc_ms, style = label.style_label_down, size = size.small)
+        lc_bear = choch_bear ? color.orange : color.red
+        lt_bear = choch_bear ? 'CHoCH ▼' : 'BOS ▼'
+        label.new(bar_index, high + ta.atr(14) * 0.5, lt_bear, color = color.new(lc_bear, 100), textcolor = lc_bear, style = label.style_label_down, size = size.small)
 
 // ──────────────────── SCALPER PRECISION ENTRY ZONES ─────────────────────────
 show_scalper = input.bool(true, '⚡ Show Scalper Precision Entries', group = '⚡ Scalper Mode')
 
 // Scalper LONG: OB + FVG confluence in current uptrend + Braid green
-scalper_long  = in_bull_ob and in_bull_fvg and trend == 1 and BraidColor == color.green
+scalper_long  = in_bull_ob and in_bull_fvg and trend == 1 and BraidBull
 // Scalper SHORT: OB + FVG confluence in current downtrend + Braid red
-scalper_short = in_bear_ob and in_bear_fvg and trend == -1 and BraidColor == color.red
+scalper_short = in_bear_ob and in_bear_fvg and trend == -1 and BraidBear
 
 plotshape(show_scalper and scalper_long,  '⚡ Scalper LONG',  shape.diamond, location.belowbar, color.new(#00e5ff, 0), size = size.small, text = '⚡L', textcolor = #00e5ff)
 plotshape(show_scalper and scalper_short, '⚡ Scalper SHORT', shape.diamond, location.abovebar, color.new(#ff4081, 0), size = size.small, text = '⚡S', textcolor = #ff4081)
