@@ -23,12 +23,12 @@ bgcolor(dateFilter and time == sTime or dateFilter and time == eTime ? color.new
 plotshape(dateFilter and time == sTime, title = 'Start Time', style = shape.labelup, location = location.belowbar, color = color.white, text = 'Start', textcolor = color.black, size = size.tiny)
 plotshape(dateFilter and time == eTime, title = 'End Time', style = shape.labelup, location = location.belowbar, color = color.white, text = 'End', textcolor = color.black, size = size.tiny)
 
-zcTime = zoneTime == 'UTC-10' ? cTime - 10 * 60 * 60000 : zoneTime == 'UTC-8' ? cTime - 8 * 60 * 60000 : zoneTime == 'UTC-7' ? cTime - 7 * 60 * 60000 : zoneTime == 'UTC-6' ? cTime - 6 * 60 * 60000 : zoneTime == 'UTC-5' ? cTime - 5 * 60 * 60000 : zoneTime == 'UTC-4' ? cTime - 4 * 60 * 60000 : zoneTime == 'UTC-3' ? cTime - 3 * 60 * 60000 : zoneTime == 'UTC' ? cTime - 0 * 60 * 60000 : zoneTime == 'UTC+1' ? cTime + 1 * 60 * 60000 : zoneTime == 'UTC+2' ? cTime + 2 * 60 * 60000 : zoneTime == 'UTC+3' ? cTime + 3 * 60 * 60000 : zoneTime == 'UTC+4' ? cTime + 4 * 60 * 60000 : zoneTime == 'UTC+4:30' ? cTime + 4 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+5' ? cTime + 5 * 60 * 60000 : zoneTime == 'UTC+5' ? cTime + 5 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+6' ? cTime + 6 * 60 * 60000 : zoneTime == 'UTC+7' ? cTime + 7 * 60 * 60000 : zoneTime == 'UTC+8' ? cTime + 8 * 60 * 60000 : zoneTime == 'UTC+9' ? cTime + 9 * 60 * 60000 : zoneTime == 'UTC+9' ? cTime + 9 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+10' ? cTime + 10 * 60 * 60000 : zoneTime == 'UTC+11' ? cTime + 11 * 60 * 60000 : zoneTime == 'UTC+12' ? cTime + 12 * 60 * 60000 : zoneTime == 'UTC+12:45' ? cTime + 12 * 60 * 60000 + 45 * 60000 : zoneTime == 'UTC+13' ? cTime + 13 * 60 * 60000 : 0
-zsTime = zoneTime == 'UTC-10' ? sTime - 10 * 60 * 60000 : zoneTime == 'UTC-8' ? sTime - 8 * 60 * 60000 : zoneTime == 'UTC-7' ? sTime - 7 * 60 * 60000 : zoneTime == 'UTC-6' ? sTime - 6 * 60 * 60000 : zoneTime == 'UTC-5' ? sTime - 5 * 60 * 60000 : zoneTime == 'UTC-4' ? sTime - 4 * 60 * 60000 : zoneTime == 'UTC-3' ? sTime - 3 * 60 * 60000 : zoneTime == 'UTC' ? sTime - 0 * 60 * 60000 : zoneTime == 'UTC+1' ? sTime + 1 * 60 * 60000 : zoneTime == 'UTC+2' ? sTime + 2 * 60 * 60000 : zoneTime == 'UTC+3' ? sTime + 3 * 60 * 60000 : zoneTime == 'UTC+4' ? sTime + 4 * 60 * 60000 : zoneTime == 'UTC+4:30' ? sTime + 4 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+5' ? sTime + 5 * 60 * 60000 : zoneTime == 'UTC+5' ? sTime + 5 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+6' ? sTime + 6 * 60 * 60000 : zoneTime == 'UTC+7' ? sTime + 7 * 60 * 60000 : zoneTime == 'UTC+8' ? sTime + 8 * 60 * 60000 : zoneTime == 'UTC+9' ? sTime + 9 * 60 * 60000 : zoneTime == 'UTC+9' ? sTime + 9 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+10' ? sTime + 10 * 60 * 60000 : zoneTime == 'UTC+11' ? sTime + 11 * 60 * 60000 : zoneTime == 'UTC+12' ? sTime + 12 * 60 * 60000 : zoneTime == 'UTC+12:45' ? sTime + 12 * 60 * 60000 + 45 * 60000 : zoneTime == 'UTC+13' ? sTime + 13 * 60 * 60000 : 0
-zeTime = zoneTime == 'UTC-10' ? eTime - 10 * 60 * 60000 : zoneTime == 'UTC-8' ? eTime - 8 * 60 * 60000 : zoneTime == 'UTC-7' ? eTime - 7 * 60 * 60000 : zoneTime == 'UTC-6' ? eTime - 6 * 60 * 60000 : zoneTime == 'UTC-5' ? eTime - 5 * 60 * 60000 : zoneTime == 'UTC-4' ? eTime - 4 * 60 * 60000 : zoneTime == 'UTC-3' ? eTime - 3 * 60 * 60000 : zoneTime == 'UTC' ? eTime - 0 * 60 * 60000 : zoneTime == 'UTC+1' ? eTime + 1 * 60 * 60000 : zoneTime == 'UTC+2' ? eTime + 2 * 60 * 60000 : zoneTime == 'UTC+3' ? eTime + 3 * 60 * 60000 : zoneTime == 'UTC+4' ? eTime + 4 * 60 * 60000 : zoneTime == 'UTC+4:30' ? eTime + 4 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+5' ? eTime + 5 * 60 * 60000 : zoneTime == 'UTC+5' ? eTime + 5 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+6' ? eTime + 6 * 60 * 60000 : zoneTime == 'UTC+7' ? eTime + 7 * 60 * 60000 : zoneTime == 'UTC+8' ? eTime + 8 * 60 * 60000 : zoneTime == 'UTC+9' ? eTime + 9 * 60 * 60000 : zoneTime == 'UTC+9' ? eTime + 9 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+10' ? eTime + 10 * 60 * 60000 : zoneTime == 'UTC+11' ? eTime + 11 * 60 * 60000 : zoneTime == 'UTC+12' ? eTime + 12 * 60 * 60000 : zoneTime == 'UTC+12:45' ? eTime + 12 * 60 * 60000 + 45 * 60000 : zoneTime == 'UTC+13' ? eTime + 13 * 60 * 60000 : 0
+zcTime = zoneTime == 'UTC-10' ? cTime - 10 * 60 * 60000 : zoneTime == 'UTC-8' ? cTime - 8 * 60 * 60000 : zoneTime == 'UTC-7' ? cTime - 7 * 60 * 60000 : zoneTime == 'UTC-6' ? cTime - 6 * 60 * 60000 : zoneTime == 'UTC-5' ? cTime - 5 * 60 * 60000 : zoneTime == 'UTC-4' ? cTime - 4 * 60 * 60000 : zoneTime == 'UTC-3' ? cTime - 3 * 60 * 60000 : zoneTime == 'UTC' ? cTime - 0 * 60 * 60000 : zoneTime == 'UTC+1' ? cTime + 1 * 60 * 60000 : zoneTime == 'UTC+2' ? cTime + 2 * 60 * 60000 : zoneTime == 'UTC+3' ? cTime + 3 * 60 * 60000 : zoneTime == 'UTC+4' ? cTime + 4 * 60 * 60000 : zoneTime == 'UTC+4:30' ? cTime + 4 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+5' ? cTime + 5 * 60 * 60000 : zoneTime == 'UTC+5:30' ? cTime + 5 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+6' ? cTime + 6 * 60 * 60000 : zoneTime == 'UTC+7' ? cTime + 7 * 60 * 60000 : zoneTime == 'UTC+8' ? cTime + 8 * 60 * 60000 : zoneTime == 'UTC+9' ? cTime + 9 * 60 * 60000 : zoneTime == 'UTC+9:30' ? cTime + 9 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+10' ? cTime + 10 * 60 * 60000 : zoneTime == 'UTC+11' ? cTime + 11 * 60 * 60000 : zoneTime == 'UTC+12' ? cTime + 12 * 60 * 60000 : zoneTime == 'UTC+12:45' ? cTime + 12 * 60 * 60000 + 45 * 60000 : zoneTime == 'UTC+13' ? cTime + 13 * 60 * 60000 : 0
+zsTime = zoneTime == 'UTC-10' ? sTime - 10 * 60 * 60000 : zoneTime == 'UTC-8' ? sTime - 8 * 60 * 60000 : zoneTime == 'UTC-7' ? sTime - 7 * 60 * 60000 : zoneTime == 'UTC-6' ? sTime - 6 * 60 * 60000 : zoneTime == 'UTC-5' ? sTime - 5 * 60 * 60000 : zoneTime == 'UTC-4' ? sTime - 4 * 60 * 60000 : zoneTime == 'UTC-3' ? sTime - 3 * 60 * 60000 : zoneTime == 'UTC' ? sTime - 0 * 60 * 60000 : zoneTime == 'UTC+1' ? sTime + 1 * 60 * 60000 : zoneTime == 'UTC+2' ? sTime + 2 * 60 * 60000 : zoneTime == 'UTC+3' ? sTime + 3 * 60 * 60000 : zoneTime == 'UTC+4' ? sTime + 4 * 60 * 60000 : zoneTime == 'UTC+4:30' ? sTime + 4 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+5' ? sTime + 5 * 60 * 60000 : zoneTime == 'UTC+5:30' ? sTime + 5 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+6' ? sTime + 6 * 60 * 60000 : zoneTime == 'UTC+7' ? sTime + 7 * 60 * 60000 : zoneTime == 'UTC+8' ? sTime + 8 * 60 * 60000 : zoneTime == 'UTC+9' ? sTime + 9 * 60 * 60000 : zoneTime == 'UTC+9:30' ? sTime + 9 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+10' ? sTime + 10 * 60 * 60000 : zoneTime == 'UTC+11' ? sTime + 11 * 60 * 60000 : zoneTime == 'UTC+12' ? sTime + 12 * 60 * 60000 : zoneTime == 'UTC+12:45' ? sTime + 12 * 60 * 60000 + 45 * 60000 : zoneTime == 'UTC+13' ? sTime + 13 * 60 * 60000 : 0
+zeTime = zoneTime == 'UTC-10' ? eTime - 10 * 60 * 60000 : zoneTime == 'UTC-8' ? eTime - 8 * 60 * 60000 : zoneTime == 'UTC-7' ? eTime - 7 * 60 * 60000 : zoneTime == 'UTC-6' ? eTime - 6 * 60 * 60000 : zoneTime == 'UTC-5' ? eTime - 5 * 60 * 60000 : zoneTime == 'UTC-4' ? eTime - 4 * 60 * 60000 : zoneTime == 'UTC-3' ? eTime - 3 * 60 * 60000 : zoneTime == 'UTC' ? eTime - 0 * 60 * 60000 : zoneTime == 'UTC+1' ? eTime + 1 * 60 * 60000 : zoneTime == 'UTC+2' ? eTime + 2 * 60 * 60000 : zoneTime == 'UTC+3' ? eTime + 3 * 60 * 60000 : zoneTime == 'UTC+4' ? eTime + 4 * 60 * 60000 : zoneTime == 'UTC+4:30' ? eTime + 4 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+5' ? eTime + 5 * 60 * 60000 : zoneTime == 'UTC+5:30' ? eTime + 5 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+6' ? eTime + 6 * 60 * 60000 : zoneTime == 'UTC+7' ? eTime + 7 * 60 * 60000 : zoneTime == 'UTC+8' ? eTime + 8 * 60 * 60000 : zoneTime == 'UTC+9' ? eTime + 9 * 60 * 60000 : zoneTime == 'UTC+9:30' ? eTime + 9 * 60 * 60000 + 30 * 60000 : zoneTime == 'UTC+10' ? eTime + 10 * 60 * 60000 : zoneTime == 'UTC+11' ? eTime + 11 * 60 * 60000 : zoneTime == 'UTC+12' ? eTime + 12 * 60 * 60000 : zoneTime == 'UTC+12:45' ? eTime + 12 * 60 * 60000 + 45 * 60000 : zoneTime == 'UTC+13' ? eTime + 13 * 60 * 60000 : 0
 
 tradeDateIsAllowed() =>
-    dateFilter ? time >= sTime and time <= eTime : true
+    dateFilter ? time >= zsTime and time <= zeTime : true
 dateRange = tradeDateIsAllowed()
 
 
@@ -226,7 +226,7 @@ margin = input.int(10, title = 'Margin % (Use it Only if you use copytrading or 
 lev = input.int(30, group = 'Zignaly Settings')
 qty = margin / close
 
-slbm = et == ex1 ? Psls : slb
+slbm = et == ex1 ? Pslb : slb
 slsm = et == ex1 ? Psls : sls
 slbmessage = '","stopLossPriority":"price","stopLossPrice":"' + str.tostring(slbm)
 slsmessage = '","stopLossPriority":"price","stopLossPrice":"' + str.tostring(slsm)
@@ -258,13 +258,13 @@ slcommand = '{"key":"' + str.tostring(apikey) + '","pair":"' + str.tostring(PAIR
 tpb1tsp = et == ex1 ? ptp1 * 100 : truncate((tpb1 - cb) * 100 / cb, 2)
 tpb2tsp = et == ex1 ? ptp2 * 100 : truncate((tpb2 - cb) * 100 / cb, 2)
 tpb3tsp = et == ex1 ? ptp3 * 100 : truncate((tpb3 - cb) * 100 / cb, 2)
-tpb4tsp = ptp4 * 100
+tpb4tsp = et == ex1 ? ptp4 * 100 : truncate((tpb4 - cb) * 100 / cb, 2)
 slbtsp = truncate((cb - slb) * 100 / cb, 2)
 
 tps1tsp = et == ex1 ? ptp1 * 100 : truncate((cs - tps1) * 100 / cs, 2)
 tps2tsp = et == ex1 ? ptp2 * 100 : truncate((cs - tps2) * 100 / cs, 2)
 tps3tsp = et == ex1 ? ptp3 * 100 : truncate((cs - tps3) * 100 / cs, 2)
-tps4tsp = ptp4 * 100
+tps4tsp = et == ex1 ? ptp4 * 100 : truncate((cs - tps4) * 100 / cs, 2)
 slstsp = truncate((sls - cs) * 100 / cs, 2)
 
 slbmsp = et == ex1 ? psl * 100 : slbtsp
@@ -632,7 +632,7 @@ frama_mod(source, c) =>
     frama_SC = 200
     frama_FC = 1
     e = 2.7182818284590452353602874713527
-    w = math.log(int(2 / (frama_SC + 1))) / math.log(e) // Natural logarithm (ln(2/(SC+1))) workaround
+    w = math.log(2 / (frama_SC + 1)) / math.log(e) // Natural logarithm (ln(2/(SC+1))) workaround
     H1 = ta.highest(high, len1)
     l1111 = ta.lowest(low, len1)
     N1 = (H1 - l1111) / len1
@@ -651,7 +651,7 @@ frama_mod(source, c) =>
     oldN = (2 - oldalpha) / oldalpha
     N = (frama_SC - frama_FC) * (oldN - 1) / (frama_SC - 1) + frama_FC
     alpha_ = 2 / (N + 1)
-    alpha = alpha_ < int(2 / (frama_SC + 1)) ? int(2 / (frama_SC + 1)) : alpha_ > 1 ? 1 : alpha_
+    alpha = alpha_ < 2 / (frama_SC + 1) ? 2 / (frama_SC + 1) : alpha_ > 1 ? 1 : alpha_
     //frama = 0.0
     result := (1 - alpha) * nz(result[1]) + alpha * source
     result
@@ -823,7 +823,7 @@ colour5 = color.new(#00807C, 85)
 colour6 = color.new(#7F430D, 85)
 
 c01 = Theme == 'Theme 1' ? colour1 : Theme == 'Theme 2' ? colour3 : Theme == 'Theme 3' ? colour5 : Theme == 'No fill' ? #FFFFFF00 : na
-c02 = Theme == 'Theme 1' ? colour2 : Theme == 'Theme 2' ? colour4 : Theme == 'Theme 3' ? colour6 : Theme == 'N0 fill' ? #FFFFFF00 : na
+c02 = Theme == 'Theme 1' ? colour2 : Theme == 'Theme 2' ? colour4 : Theme == 'Theme 3' ? colour6 : Theme == 'No fill' ? #FFFFFF00 : na
 
 cl1 = input.int(2, title = 'Cloud', inline = 'Cloud', group = 'MA cloud')
 cl2 = input.int(6, title = '/2', inline = 'Cloud', group = 'MA cloud')
@@ -1113,7 +1113,7 @@ trenddir = RSI > 55 ? 'Bullish' : RSI < 45 ? 'Bearish' : 'Sideways'
 
 //Tele Notif
 ep = trend == 1 ? cb : cs
-winrate = truncate(strategy.wintrades / strategy.closedtrades * 100, 0)
+winrate = strategy.closedtrades != 0 ? truncate(strategy.wintrades / strategy.closedtrades * 100, 0) : 0
 capitalgain = 100 * strategy.netprofit / initialcapital
 closedtrades = strategy.closedtrades
 
@@ -1141,13 +1141,13 @@ sinceentrys = int(math.max(1, nz(ta.barssince(sell and backtest and trendType)))
 highestbars = ta.highest(high[1], sinceentrys)
 lowestbars = ta.lowest(low[1], sinceentrys)
 
-hittp1 = strategy.position_size > 0 ? highestbars > tpb1t : strategy.position_size < 0 ? lowestbars < tps1t : false
+hittp1 = strategy.position_size > 0 ? highestbarb > tpb1t : strategy.position_size < 0 ? lowestbars < tps1t : false
 hittp1t = hittp1 ? ' ✅' : ''
-hittp2 = strategy.position_size > 0 ? highestbars > tpb2t : strategy.position_size < 0 ? lowestbars < tps2t : false
+hittp2 = strategy.position_size > 0 ? highestbarb > tpb2t : strategy.position_size < 0 ? lowestbars < tps2t : false
 hittp2t = hittp2 ? ' ✅' : ''
-hittp3 = strategy.position_size > 0 ? highestbars > tpb3t : strategy.position_size < 0 ? lowestbars < tps3t : false
+hittp3 = strategy.position_size > 0 ? highestbarb > tpb3t : strategy.position_size < 0 ? lowestbars < tps3t : false
 hittp3t = hittp3 ? ' ✅' : ''
-hittp4 = strategy.position_size > 0 ? highestbars > tpb4t : strategy.position_size < 0 ? lowestbars < tps4t : false
+hittp4 = strategy.position_size > 0 ? highestbarb > tpb4t : strategy.position_size < 0 ? lowestbars < tps4t : false
 hittp4t = hittp4 ? ' ✅' : ''
 /////////////////////////////////////////////
 // Time Trade
