@@ -41,7 +41,7 @@ truncate(number, decimals) =>
 
 //=======================================================================================
 // Trade Time
-daysback = 14
+daysback = input.int(90, 'Signal History (Days)', minval = 14, maxval = 500, group = '📆 Timeframe 📆')
 millisecondinxdays = 1000 * 60 * 60 * 24 * daysback
 leftbar = timenow - time < millisecondinxdays
 backtest = leftbar
@@ -1195,18 +1195,200 @@ slshortcommand = ZZ == z3 ? slshort : slcommand
 
 
 ///////////////////////////////////////////////////////////////////////////////
+//==============================================================================
+// 🏦 ICT / SMART MONEY CONCEPTS — PROFESSIONAL ENTRY ZONE ENGINE
+//==============================================================================
+
+// ─────────────────────────────── ORDER BLOCKS ────────────────────────────────
+show_ob     = input.bool(true, '🏦 Show Order Blocks', group = '🏦 ICT Order Blocks')
+ob_bull_col = input.color(color.new(#00c853, 80), 'Bullish OB Color', group = '🏦 ICT Order Blocks')
+ob_bear_col = input.color(color.new(#ff1744, 80), 'Bearish OB Color', group = '🏦 ICT Order Blocks')
+
+// Bullish OB: bearish candle immediately before a larger bullish candle (impulse up)
+bull_ob_formed = close[1] < open[1] and (close - open) > (open[1] - close[1])
+// Bearish OB: bullish candle immediately before a larger bearish candle (impulse down)
+bear_ob_formed = close[1] > open[1] and (open - close) > (close[1] - open[1])
+
+var float bull_ob_top = na
+var float bull_ob_bot = na
+var float bear_ob_top = na
+var float bear_ob_bot = na
+var int   bull_ob_idx = na
+var int   bear_ob_idx = na
+
+if bull_ob_formed
+    bull_ob_top := high[1]
+    bull_ob_bot := low[1]
+    bull_ob_idx := bar_index - 1
+
+if bear_ob_formed
+    bear_ob_top := high[1]
+    bear_ob_bot := low[1]
+    bear_ob_idx := bar_index - 1
+
+// Invalidate OB on full breach
+if not na(bull_ob_bot) and low < bull_ob_bot
+    bull_ob_top := na
+    bull_ob_bot := na
+    bull_ob_idx := na
+
+if not na(bear_ob_top) and high > bear_ob_top
+    bear_ob_top := na
+    bear_ob_bot := na
+    bear_ob_idx := na
+
+var box bull_ob_bx = na
+var box bear_ob_bx = na
+
+if show_ob
+    if not na(bull_ob_top) and not na(bull_ob_idx)
+        box.delete(bull_ob_bx)
+        bull_ob_bx := box.new(bull_ob_idx, bull_ob_top, bar_index + 5, bull_ob_bot, xloc = xloc.bar_index, border_color = color.new(#00c853, 0), bgcolor = ob_bull_col, border_width = 1)
+    if not na(bear_ob_top) and not na(bear_ob_idx)
+        box.delete(bear_ob_bx)
+        bear_ob_bx := box.new(bear_ob_idx, bear_ob_top, bar_index + 5, bear_ob_bot, xloc = xloc.bar_index, border_color = color.new(#ff1744, 0), bgcolor = ob_bear_col, border_width = 1)
+
+in_bull_ob = not na(bull_ob_top) and close >= bull_ob_bot and close <= bull_ob_top
+in_bear_ob = not na(bear_ob_top) and close >= bear_ob_bot and close <= bear_ob_top
+
+// ─────────────────────────────── FAIR VALUE GAPS ─────────────────────────────
+show_fvg     = input.bool(true, '🔵 Show Fair Value Gaps', group = '🔵 Fair Value Gaps')
+fvg_bull_col = input.color(color.new(#00bcd4, 80), 'Bullish FVG Color', group = '🔵 Fair Value Gaps')
+fvg_bear_col = input.color(color.new(#e91e63, 80), 'Bearish FVG Color', group = '🔵 Fair Value Gaps')
+
+// Bullish FVG: low[0] > high[2] — gap between candle 1 and candle 3
+bull_fvg_cond = low > high[2]
+// Bearish FVG: high[0] < low[2]
+bear_fvg_cond = high < low[2]
+
+var float bull_fvg_top = na
+var float bull_fvg_bot = na
+var float bear_fvg_top = na
+var float bear_fvg_bot = na
+var int   bull_fvg_idx = na
+var int   bear_fvg_idx = na
+
+if bull_fvg_cond
+    bull_fvg_top := low
+    bull_fvg_bot := high[2]
+    bull_fvg_idx := bar_index
+
+if bear_fvg_cond
+    bear_fvg_top := low[2]
+    bear_fvg_bot := high
+    bear_fvg_idx := bar_index
+
+// FVG filled when price enters the imbalance gap
+if not na(bull_fvg_bot) and low < bull_fvg_bot
+    bull_fvg_top := na
+    bull_fvg_bot := na
+    bull_fvg_idx := na
+
+if not na(bear_fvg_top) and high > bear_fvg_top
+    bear_fvg_top := na
+    bear_fvg_bot := na
+    bear_fvg_idx := na
+
+var box bull_fvg_bx = na
+var box bear_fvg_bx = na
+
+if show_fvg
+    if not na(bull_fvg_top) and not na(bull_fvg_idx)
+        box.delete(bull_fvg_bx)
+        bull_fvg_bx := box.new(bull_fvg_idx, bull_fvg_top, bar_index + 5, bull_fvg_bot, xloc = xloc.bar_index, border_color = color.new(#00bcd4, 0), bgcolor = fvg_bull_col, border_width = 1)
+    if not na(bear_fvg_top) and not na(bear_fvg_idx)
+        box.delete(bear_fvg_bx)
+        bear_fvg_bx := box.new(bear_fvg_idx, bear_fvg_top, bar_index + 5, bear_fvg_bot, xloc = xloc.bar_index, border_color = color.new(#e91e63, 0), bgcolor = fvg_bear_col, border_width = 1)
+
+in_bull_fvg = not na(bull_fvg_top) and close >= bull_fvg_bot and close <= bull_fvg_top
+in_bear_fvg = not na(bear_fvg_top) and close >= bear_fvg_bot and close <= bear_fvg_top
+
+// ─────────────────────── MARKET STRUCTURE: BOS / CHoCH ──────────────────────
+show_ms = input.bool(true, '📊 Show BOS / CHoCH', group = '📊 Market Structure')
+ms_len  = input.int(10, 'Pivot Length', minval = 3, maxval = 50, group = '📊 Market Structure')
+
+ph_ms = ta.pivothigh(high, ms_len, ms_len)
+pl_ms = ta.pivotlow(low, ms_len, ms_len)
+
+var float ms_last_ph = na
+var float ms_last_pl = na
+
+if not na(ph_ms)
+    ms_last_ph := high[ms_len]
+
+if not na(pl_ms)
+    ms_last_pl := low[ms_len]
+
+bos_bull  = not na(ms_last_ph) and ta.crossover(close, ms_last_ph)
+bos_bear  = not na(ms_last_pl) and ta.crossunder(close, ms_last_pl)
+choch_bull = bos_bull and trend == -1
+choch_bear = bos_bear and trend == 1
+
+if show_ms
+    if bos_bull
+        lc_ms = choch_bull ? color.orange : color.lime
+        lt_ms = choch_bull ? 'CHoCH ▲' : 'BOS ▲'
+        label.new(bar_index, low - ta.atr(14) * 0.5, lt_ms, color = color.new(lc_ms, 100), textcolor = lc_ms, style = label.style_label_up, size = size.small)
+    if bos_bear
+        lc_ms = choch_bear ? color.orange : color.red
+        lt_ms = choch_bear ? 'CHoCH ▼' : 'BOS ▼'
+        label.new(bar_index, high + ta.atr(14) * 0.5, lt_ms, color = color.new(lc_ms, 100), textcolor = lc_ms, style = label.style_label_down, size = size.small)
+
+// ──────────────────── SCALPER PRECISION ENTRY ZONES ─────────────────────────
+show_scalper = input.bool(true, '⚡ Show Scalper Precision Entries', group = '⚡ Scalper Mode')
+
+// Scalper LONG: OB + FVG confluence in current uptrend + Braid green
+scalper_long  = in_bull_ob and in_bull_fvg and trend == 1 and BraidColor == color.green
+// Scalper SHORT: OB + FVG confluence in current downtrend + Braid red
+scalper_short = in_bear_ob and in_bear_fvg and trend == -1 and BraidColor == color.red
+
+plotshape(show_scalper and scalper_long,  '⚡ Scalper LONG',  shape.diamond, location.belowbar, color.new(#00e5ff, 0), size = size.small, text = '⚡L', textcolor = #00e5ff)
+plotshape(show_scalper and scalper_short, '⚡ Scalper SHORT', shape.diamond, location.abovebar, color.new(#ff4081, 0), size = size.small, text = '⚡S', textcolor = #ff4081)
+
+// ──────────────────── HTF CONFLUENCE & CONFLUENCE SCORE ─────────────────────
+htf_filter     = input.bool(true, '✅ HTF Trend Filter (4H + Daily)',     group = '🎯 Pro Confluence')
+use_confluence = input.bool(true, '🎯 Use Confluence Score Filter',       group = '🎯 Pro Confluence')
+min_conf_score = input.int(2, 'Min Confluence Score (1-5)', minval = 1, maxval = 5, group = '🎯 Pro Confluence')
+
+// HTF trend via EMA-50 on 4H and Daily (inline — no forward-reference needed)
+htf_ema50_4h = request.security(syminfo.tickerid, '240', ta.ema(close, 50))
+htf_ema50_d  = request.security(syminfo.tickerid, 'D',   ta.ema(close, 50))
+htf_close_4h = request.security(syminfo.tickerid, '240', close)
+htf_close_d  = request.security(syminfo.tickerid, 'D',   close)
+
+htf_bull_ok  = htf_close_4h > htf_ema50_4h and htf_close_d > htf_ema50_d
+htf_bear_ok  = htf_close_4h < htf_ema50_4h and htf_close_d < htf_ema50_d
+htf_long_ok  = htf_filter ? htf_bull_ok : true
+htf_short_ok = htf_filter ? htf_bear_ok : true
+
+// Confluence scoring: each matching condition adds 1 point (max 5)
+long_conf_score  = (trend == 1 ? 1 : 0) + (htf_bull_ok ? 1 : 0) + (in_bull_ob ? 1 : 0) + (in_bull_fvg ? 1 : 0) + ((choch_bull or bos_bull) ? 1 : 0)
+short_conf_score = (trend == -1 ? 1 : 0) + (htf_bear_ok ? 1 : 0) + (in_bear_ob ? 1 : 0) + (in_bear_fvg ? 1 : 0) + ((choch_bear or bos_bear) ? 1 : 0)
+
+conf_long_ok  = use_confluence ? long_conf_score  >= min_conf_score : true
+conf_short_ok = use_confluence ? short_conf_score >= min_conf_score : true
+
+// Professional zone text for alerts
+ob_zone_long_txt  = not na(bull_ob_bot) ? 'OB Zone: '  + str.tostring(truncate(bull_ob_bot, dpa)) + '-' + str.tostring(truncate(bull_ob_top, dpa))  : 'No OB'
+ob_zone_short_txt = not na(bear_ob_bot) ? 'OB Zone: '  + str.tostring(truncate(bear_ob_bot, dpa)) + '-' + str.tostring(truncate(bear_ob_top, dpa))  : 'No OB'
+fvg_zone_long_txt  = not na(bull_fvg_bot) ? 'FVG: ' + str.tostring(truncate(bull_fvg_bot, dpa)) + '-' + str.tostring(truncate(bull_fvg_top, dpa)) : 'No FVG'
+fvg_zone_short_txt = not na(bear_fvg_bot) ? 'FVG: ' + str.tostring(truncate(bear_fvg_bot, dpa)) + '-' + str.tostring(truncate(bear_fvg_top, dpa)) : 'No FVG'
+htf_status_long  = htf_bull_ok ? '4H+D:✅Bullish' : '4H+D:⚠️Mixed'
+htf_status_short = htf_bear_ok ? '4H+D:✅Bearish' : '4H+D:⚠️Mixed'
+
+///////////////////////////////////////////////////////////////////////////////
 //Alerts
 // to automate put this in trendinview message: {{strategy.order.alert_message}}
 //long = input.text_area(defval = "zalupa", title = "Long Entry Message", group = "Alerts")
 //short = input.text_area(defval = "zalupa", title = "Short Entry Message", group = "Alerts")
 
-if buy and backtest and trendType and longside
+if buy and backtest and trendType and longside and htf_long_ok and conf_long_ok
     strategy.entry('Buy', direction = strategy.long, comment = 'LONG', alert_message = longbotcommand)
-    alert(message = '📩 #' + syminfo.ticker + '  |' + timeframe.period + ' | laverage 10-20x\n📈 Buy Entry Zone: ' + str.tostring(truncate(ep, 0)) + '\n🎯Accuracy of this strategy : ' + str.tostring(winrate) + ' %' + ' - \n\n- ⏳ - Signal details:\nTarget 1 : ' + str.tostring(truncate(tpb1t, 0)) + '\nTarget 2 : ' + str.tostring(truncate(tpb2t, 0)) + '\nTarget 3 : ' + str.tostring(truncate(tpb3t, 0)) + '\nTarget 4 : ' + str.tostring(truncate(tpb4t, 0)) + '\n🧲Backtest signals Days:' + str.tostring(daysback) + '\n❌Stop-Loss: ' + str.tostring(truncate(slbt, 0)) + '\n💡Happy Trade' + '\nBy tradelocal')
+    alert(message = '📩 #' + syminfo.ticker + ' |' + timeframe.period + '| lev 10-20x\n📈 BUY Entry: ' + str.tostring(truncate(ep, dpa)) + '\n🎯Accuracy: ' + str.tostring(winrate) + '% | Score: ' + str.tostring(long_conf_score) + '/5\n📍 ' + ob_zone_long_txt + '\n🔵 ' + fvg_zone_long_txt + '\n🌐 ' + htf_status_long + '\n\n⏳ Targets:\nTP1: ' + str.tostring(truncate(tpb1t, dpa)) + '\nTP2: ' + str.tostring(truncate(tpb2t, dpa)) + '\nTP3: ' + str.tostring(truncate(tpb3t, dpa)) + '\nTP4: ' + str.tostring(truncate(tpb4t, dpa)) + '\n❌SL: ' + str.tostring(truncate(slbt, dpa)) + '\n💡Happy Trade\nhttps://t.me/Fian_Trader')
 
-if sell and backtest and trendType and shortside
+if sell and backtest and trendType and shortside and htf_short_ok and conf_short_ok
     strategy.entry('Sell', direction = strategy.short, comment = 'SHORT', alert_message = shortbotcommand)
-    alert(message = '📩 #' + syminfo.ticker + '  |' + timeframe.period + ' | laverage 10-20x\n📈 Sell Entry Zone: ' + str.tostring(truncate(ep, 0)) + '\n🎯Accuracy of this strategy : ' + str.tostring(winrate) + ' %' + ' - \n\n- ⏳ -  Signal details:\nTarget 1 : ' + str.tostring(truncate(tps1t, 0)) + '\nTarget 2 : ' + str.tostring(truncate(tps2t, 0)) + '\nTarget 3 : ' + str.tostring(truncate(tps3t, 0)) + '\nTarget 4 : ' + str.tostring(truncate(tps4t, 0)) + '\n🧲Backtest signals Days:' + str.tostring(daysback) + '\n❌Stop-Loss: ' + str.tostring(truncate(slst, 0)) + '\n💡Happy Trade' + '\nBy tradelocal')
+    alert(message = '📩 #' + syminfo.ticker + ' |' + timeframe.period + '| lev 10-20x\n📉 SELL Entry: ' + str.tostring(truncate(ep, dpa)) + '\n🎯Accuracy: ' + str.tostring(winrate) + '% | Score: ' + str.tostring(short_conf_score) + '/5\n📍 ' + ob_zone_short_txt + '\n🔵 ' + fvg_zone_short_txt + '\n🌐 ' + htf_status_short + '\n\n⏳ Targets:\nTP1: ' + str.tostring(truncate(tps1t, dpa)) + '\nTP2: ' + str.tostring(truncate(tps2t, dpa)) + '\nTP3: ' + str.tostring(truncate(tps3t, dpa)) + '\nTP4: ' + str.tostring(truncate(tps4t, dpa)) + '\n❌SL: ' + str.tostring(truncate(slst, dpa)) + '\n💡Happy Trade\nhttps://t.me/Fian_Trader')
 
 
 strategy.exit('TP 1', 'Buy', qty_percent = qtytp1, limit = tpb1t, alert_message = exitbotcommandl1)
